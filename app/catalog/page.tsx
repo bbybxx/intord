@@ -1,5 +1,23 @@
+import { Suspense } from "react";
 import { CatalogClient } from "@/components/catalog/CatalogClient";
 import { getAllProducts } from "@/lib/products";
+
+// Простой скелетон для загрузки
+function CatalogSkeleton() {
+  return (
+    <div className="animate-pulse">
+      <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="md:col-span-1 space-y-4">
+          <div className="h-64 bg-gray-200 rounded"></div>
+        </div>
+        <div className="md:col-span-3">
+          <div className="h-96 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function CatalogPage() {
   const products = getAllProducts();
@@ -14,7 +32,9 @@ export default function CatalogPage() {
         </p>
       </div>
 
-      <CatalogClient products={products} />
+      <Suspense fallback={<CatalogSkeleton />}>
+        <CatalogClient products={products} />
+      </Suspense>
     </div>
   );
 }
