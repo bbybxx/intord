@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: Manrope, sans-serif;
+  color: #14120f;
+  background:
+    radial-gradient(circle at 90% -5%, rgba(223, 208, 188, 0.32), transparent 40%),
+    radial-gradient(circle at 0% 40%, rgba(239, 231, 221, 0.4), transparent 35%),
+    #fdfcf9;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Безопасные отступы для мобильных устройств с выемками */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Предотвращение выхода контента за пределы экрана на мобильных */
+@media (max-width: 640px) {
+  .overflow-x-hidden-mobile {
+    overflow-x: hidden;
+  }
+  
+  img, .max-w-full-mobile {
+    max-width: 100%;
+  }
+  
+  .container-padding-mobile {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
