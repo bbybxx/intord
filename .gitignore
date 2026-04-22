@@ -38,8 +38,10 @@ next-env.d.ts
 *.log
 orders.log
 
-# data files (большие CSV и изображения)
-data/
+# data files - исключаем только большие CSV и бэкапы
+data/*.csv
+data/*.csv.backup*
+data/errors.log
 downloads/
 fp/
 
