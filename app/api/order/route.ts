@@ -44,12 +44,17 @@ async function sendTelegramMessage(message: string) {
       }),
     });
 
+    const responseData = await response.json();
+    
     if (!response.ok) {
-      const error = await response.text();
-      console.error("Failed to send Telegram message:", error);
+      console.error("Failed to send Telegram message:", responseData);
+      throw new Error(`Telegram API error: ${responseData.description || 'Unknown error'}`);
     }
+    
+    console.log("Telegram message sent successfully:", responseData);
   } catch (error) {
     console.error("Error sending Telegram message:", error);
+    // Don't throw - we'll still save the order locally
   }
 }
 

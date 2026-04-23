@@ -54,7 +54,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
          </p>
 
         <Link href={`/product/${product.id}`} className="block">
-          <h3 className="font-heading text-lg text-ink transition hover:text-sand-800 line-clamp-2 min-h-[3.5rem]">
+          <h3 className="font-heading text-lg text-ink transition hover:text-sand-800 line-clamp-2 min-h-[3.5rem] catalog-title-mobile">
             {product.name}
           </h3>
         </Link>
@@ -63,11 +63,11 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-base font-semibold text-ink">
+            <span className="text-base font-semibold text-ink catalog-price-mobile">
               {formatPrice(product.price)} RUB
             </span>
             {product.oldPrice ? (
-              <span className="text-sm text-slate-400 line-through">
+              <span className="text-sm text-slate-400 line-through catalog-price-mobile">
                 {formatPrice(product.oldPrice)}
               </span>
             ) : null}
@@ -75,7 +75,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
           <Link
             href={`/product/${product.id}`}
-            className="inline-flex items-center gap-2 rounded-full border border-sand-200 px-3 py-1.5 text-sm font-medium text-ink transition hover:bg-sand-100"
+            className="inline-flex items-center gap-2 rounded-full border border-sand-200 px-3 py-1.5 text-sm font-medium text-ink transition hover:bg-sand-100 catalog-button-mobile"
           >
             <Ruler size={16} />
             Выбрать размер

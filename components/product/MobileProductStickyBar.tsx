@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { ShoppingBag, ChevronUp, ChevronDown } from "lucide-react";
-import { toast } from "sonner";
 import { useBasketStore } from "@/store/basket";
 import { Product } from "@/types/product";
 import { SizeSelector } from "./SizeSelector";
@@ -22,13 +21,11 @@ export function MobileProductStickyBar({ product, selectedSize, onSizeChange }: 
   const handleAddToCart = () => {
     if (!selectedSize) {
       setSizeError(true);
-      toast.error("Пожалуйста, выберите размер");
       return;
     }
 
     addItem(product, selectedSize);
     setIsAdded(true);
-    toast.success(`Товар ${product.name} добавлен в корзину`);
     
     // Сбрасываем состояние через 2 секунды
     setTimeout(() => setIsAdded(false), 2000);
@@ -103,13 +100,6 @@ export function MobileProductStickyBar({ product, selectedSize, onSizeChange }: 
           </button>
         </div>
       </div>
-
-      {/* Индикатор добавления в корзину */}
-      {isAdded && (
-        <div className="absolute -top-12 left-1/2 -translate-x-1/2 rounded-full bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-lg">
-          Товар добавлен в корзину!
-        </div>
-      )}
     </div>
   );
 }

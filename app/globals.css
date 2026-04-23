@@ -30,18 +30,35 @@ body {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Предотвращение выхода контента за пределы экрана на мобильных */
-@media (max-width: 640px) {
-  .overflow-x-hidden-mobile {
-    overflow-x: hidden;
+  /* Предотвращение выхода контента за пределы экрана на мобильных */
+  @media (max-width: 640px) {
+    .overflow-x-hidden-mobile {
+      overflow-x: hidden;
+    }
+    
+    img, .max-w-full-mobile {
+      max-width: 100%;
+    }
+    
+    .container-padding-mobile {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
   
-  img, .max-w-full-mobile {
-    max-width: 100%;
+  /* Динамическое уменьшение шрифта для каталога на мобильных устройствах */
+  @media (max-width: 640px) {
+    .catalog-title-mobile {
+      font-size: 0.875rem !important;
+      line-height: 1.25rem !important;
+    }
+    
+    .catalog-price-mobile {
+      font-size: 0.75rem !important;
+    }
+    
+    .catalog-button-mobile {
+      font-size: 0.75rem !important;
+      padding: 0.25rem 0.5rem !important;
+    }
   }
-  
-  .container-padding-mobile {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
