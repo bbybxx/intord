@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { ShoppingBag } from "lucide-react";
-import { toast } from "sonner";
 import { Accordion } from "@/components/ui/Accordion";
 import { formatPrice } from "@/lib/products";
 import { useBasketStore } from "@/store/basket";
@@ -42,23 +41,25 @@ export function ProductPurchase({ product, selectedSize, onSizeChange }: Product
         errorText="Пожалуйста, выберите размер"
       />
 
-      <button
-        type="button"
-        onClick={() => {
-          if (!selectedSize) {
-            setSizeError(true);
-            return;
-          }
+       <button
+         type="button"
+         onClick={() => {
+           if (!selectedSize) {
+             setSizeError(true);
+             return;
+           }
 
-          addItem(product, selectedSize);
-          setIsAdded(true);
-          toast.success(`Товар ${product.name} добавлен в корзину`);
-        }}
-        className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-6 text-sm font-semibold text-white transition hover:opacity-90"
-      >
-        <ShoppingBag size={16} />
-        {isAdded ? "Добавлено в корзину" : "В корзину"}
-      </button>
+   addItem(product, selectedSize);
+   setIsAdded(true);
+         }}
+         className={`
+           inline-flex h-12 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold text-white transition
+           ${isAdded ? "bg-green-600 hover:bg-green-700" : "bg-ink hover:opacity-90"}
+         `}
+       >
+         <ShoppingBag size={16} />
+         {isAdded ? "Добавлено в корзину" : "В корзину"}
+       </button>
 
       <div className="rounded-2xl border border-sand-100 bg-white px-5">
         <Accordion title="Описание" content={product.description} defaultOpen />

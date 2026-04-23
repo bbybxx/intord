@@ -61,7 +61,7 @@ export const useBasketStore = create<BasketStore>()(
                 article: product.article,
                 name: product.name,
                 price: product.price,
-                imagePath: product.imagePaths[0],
+                imagePath: product.imagePaths[0] || "/images/placeholder.jpg",
                 selectedSize,
                 quantity: 1
               }
@@ -91,18 +91,9 @@ export const useBasketStore = create<BasketStore>()(
       applyPromoCode: (code) => {
         const normalized = code.trim().toUpperCase();
 
-        if (normalized === "INTERMAG10") {
-          set({ promoCode: normalized, discount: 10 });
-          return { success: true, message: "Промокод INTERMAG10 применен" };
-        }
-
-        if (normalized === "SALE500") {
-          set({ promoCode: normalized, discount: 500 });
-          return { success: true, message: "Промокод SALE500 применен" };
-        }
-
+        // Все промокоды отключены, поле остается но не работает
         set({ promoCode: null, discount: 0 });
-        return { success: false, message: "Промокод не найден" };
+        return { success: false, message: "Промокоды временно не работают" };
       },
       clearPromoCode: () => set({ promoCode: null, discount: 0 }),
       clear: () => set({ items: [], promoCode: null, discount: 0 }),
@@ -115,21 +106,7 @@ export const useBasketStore = create<BasketStore>()(
           return acc + item.quantity * item.price;
         }, 0),
       discountAmount: () => {
-        const { promoCode, discount, subtotalPrice } = get();
-        const subtotal = subtotalPrice();
-
-        if (!promoCode || discount <= 0) {
-          return 0;
-        }
-
-        if (promoCode === "INTERMAG10") {
-          return Math.round((subtotal * discount) / 100);
-        }
-
-        if (promoCode === "SALE500") {
-          return Math.min(discount, subtotal);
-        }
-
+        // Промокоды отключены, всегда возвращаем 0
         return 0;
       },
       totalPrice: () => {
@@ -148,16 +125,26 @@ export const useBasketStore = create<BasketStore>()(
             return;
           }
 
-          const current = window.localStorage.getItem("intermag-basket");
-          const legacy = window.localStorage.getItem("intermag-basket");
+          // Add event listener for storage changes (sync between tabs)
+          const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === "intermag-basket") {
+              try {
+                const newState = JSON.parse(event.newValue || "{}");
+                if (newState.state?.items) {
+                  useBasketStore.setState(newState.state);
+                }
+              } catch (error) {
+                console.error("Failed to parse basket storage change:", error);
+              }
+            }
+          };
 
-          if (!current && legacy) {
-            window.localStorage.setItem("intermag-basket", legacy);
-          }
+          window.addEventListener("storage", handleStorageChange);
 
-          if (legacy) {
-            window.localStorage.removeItem("intermag-basket");
-          }
+          // Cleanup function
+          return () => {
+            window.removeEventListener("storage", handleStorageChange);
+          };
         };
       }
     }
