@@ -92,6 +92,10 @@ export function CheckoutClient() {
                     fill
                     className="object-cover"
                     sizes="64px"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/images/placeholder.jpg";
+                    }}
                   />
                 </div>
 

@@ -1,5 +1,3 @@
-import { appendFile } from "node:fs/promises";
-import path from "node:path";
 import { NextResponse } from "next/server";
 
 interface OrderPayload {
@@ -18,15 +16,19 @@ interface OrderPayload {
 }
 
 // Telegram Bot API configuration
-const TELEGRAM_BOT_TOKEN = "8681128796:AAFnWPfhhiSq1nLmxg-_sxBo7suVH55C-U0";
-// Chat ID will be obtained from environment variable or from bot updates
-// For now, we'll use an environment variable
+// Use environment variables for bot token and chat ID
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 async function sendTelegramMessage(message: string) {
   if (!TELEGRAM_CHAT_ID) {
     console.warn("TELEGRAM_CHAT_ID is not set, skipping Telegram notification");
-    return;
+    return { success: false, error: "TELEGRAM_CHAT_ID not configured" };
+  }
+
+  if (!TELEGRAM_BOT_TOKEN) {
+    console.warn("TELEGRAM_BOT_TOKEN is not set, skipping Telegram notification");
+    return { success: false, error: "TELEGRAM_BOT_TOKEN not configured" };
   }
 
   try {
@@ -48,13 +50,20 @@ async function sendTelegramMessage(message: string) {
     
     if (!response.ok) {
       console.error("Failed to send Telegram message:", responseData);
-      throw new Error(`Telegram API error: ${responseData.description || 'Unknown error'}`);
+      return { 
+        success: false, 
+        error: `Telegram API error: ${responseData.description || 'Unknown error'}` 
+      };
     }
     
-    console.log("Telegram message sent successfully:", responseData);
+    console.log("Telegram message sent successfully");
+    return { success: true };
   } catch (error) {
     console.error("Error sending Telegram message:", error);
-    // Don't throw - we'll still save the order locally
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : "Unknown error" 
+    };
   }
 }
 
@@ -62,7 +71,7 @@ function formatOrderMessage(orderId: string, payload: OrderPayload): string {
   const { customer, order } = payload;
   
   // Format items list
-  const itemsText = order.items.map((item: any) => {
+  const itemsText = (order.items as any[]).map((item) => {
     return `• ${item.name} (Размер: ${item.selectedSize}, Кол-во: ${item.quantity}) - ${item.price * item.quantity} RUB`;
   }).join('\n');
 
@@ -96,24 +105,38 @@ export async function POST(request: Request) {
     }
 
     const orderId = `${Date.now()}-${Math.floor(Math.random() * 9000 + 1000)}`;
-    const logPath = path.resolve(process.cwd(), "orders.log");
 
-    const logEntry = {
+    // Log order to console (works in both development and production)
+    console.log("New order received:", {
       orderId,
-      createdAt: new Date().toISOString(),
-      ...payload
-    };
-
-    // Save to log file
-    await appendFile(logPath, `${JSON.stringify(logEntry)}\n`, "utf8");
+      customer: payload.customer,
+      orderSummary: {
+        itemCount: payload.order.items.length,
+        total: payload.order.total,
+        subtotal: payload.order.subtotal,
+        discount: payload.order.discount
+      }
+    });
 
     // Send notification to Telegram
     const message = formatOrderMessage(orderId, payload);
-    await sendTelegramMessage(message);
+    const telegramResult = await sendTelegramMessage(message);
 
-    return NextResponse.json({ ok: true, orderId });
+    if (!telegramResult.success) {
+      console.warn("Telegram notification failed:", telegramResult.error);
+      // Continue processing order even if Telegram fails
+    }
+
+    return NextResponse.json({ 
+      ok: true, 
+      orderId,
+      telegramSent: telegramResult.success
+    });
   } catch (error) {
     console.error("Order processing error:", error);
-    return NextResponse.json({ error: "Не удалось сохранить заказ" }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Не удалось сохранить заказ",
+      details: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 });
   }
 }
