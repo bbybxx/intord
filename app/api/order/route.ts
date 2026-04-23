@@ -17,8 +17,9 @@ interface OrderPayload {
 
 // Telegram Bot API configuration
 // Use environment variables for bot token and chat ID
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+// Fallback values are provided for development, but should be set in production
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "8681128796:AAFnWPfhhiSq1nLmxg-_sxBo7suVH55C-U0";
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "592052544";
 
 async function sendTelegramMessage(message: string) {
   if (!TELEGRAM_CHAT_ID) {
