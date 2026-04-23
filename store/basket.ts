@@ -30,6 +30,19 @@ interface BasketStore {
   totalPrice: () => number;
 }
 
+// Custom storage that handles SSR
+const createCustomStorage = () => {
+  if (typeof window === "undefined") {
+    // Return a dummy storage for SSR
+    return {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+    };
+  }
+  return localStorage;
+};
+
 export const useBasketStore = create<BasketStore>()(
   persist(
     (set, get) => ({
@@ -118,7 +131,7 @@ export const useBasketStore = create<BasketStore>()(
     }),
     {
       name: "intermag-basket",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => createCustomStorage()),
       onRehydrateStorage: () => {
         return () => {
           if (typeof window === "undefined") {
