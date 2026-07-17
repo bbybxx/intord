@@ -5,7 +5,7 @@ export function Footer() {
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div className="space-y-2">
             <p className="text-sm text-slate-600">© 2021-2026 ИНТЕРМАГ. Интернет-магазин одежды и обуви.</p>
-            <p className="text-sm text-slate-500">Доставка по РФ. Обмен и возврат в течение 14 дней.</p>
+            <p className="text-sm text-slate-500">Доставка по Кыргызстану. Обмен и возврат в течение 14 дней.</p>
           </div>
           
           <div className="space-y-2">
@@ -29,9 +29,8 @@ export function Footer() {
           <div className="space-y-2">
             <p className="text-sm font-medium text-slate-700">Контакты</p>
             <div className="flex flex-col space-y-1">
-              <p className="text-sm text-slate-600">+7 (986) 927-94-57</p>
               <p className="text-sm text-slate-600">intermagllc@gmail.com</p>
-              <p className="text-sm text-slate-500">Казань, ул. Толстого, дом 41, кабинет 7</p>
+              <p className="text-sm text-slate-500">Кыргызская Республика, г. Бишкек, ул. Калык-Акиева, 72, кв 8</p>
             </div>
           </div>
         </div>

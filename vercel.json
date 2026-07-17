@@ -13,7 +13,7 @@
     }
   ],
   "env": {
-    "NEXT_PUBLIC_APP_URL": "https://intermag.vercel.app"
+    "NEXT_PUBLIC_APP_URL": "https://intord.vercel.app"
   },
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
