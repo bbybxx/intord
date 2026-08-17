@@ -5,10 +5,10 @@
 ## Необходимые переменные окружения
 
 1. **TELEGRAM_BOT_TOKEN** - токен вашего Telegram бота
-   - Значение: `TELEGRAM_BOT_TOKEN_REDACTED`
+   - Значение: `<ВАШ_ТОКЕН_БОТА>` (создайте через @BotFather, не храните токен в git)
 
 2. **TELEGRAM_CHAT_ID** - ID чата для отправки уведомлений
-   - Значение: `592052544`
+   - Значение: `<ВАШ_CHAT_ID>`
 
 ## Как настроить в Vercel Dashboard
 
@@ -18,8 +18,8 @@
 4. Добавьте следующие переменные:
 
    ```
-   TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN_REDACTED
-   TELEGRAM_CHAT_ID=592052544
+   TELEGRAM_BOT_TOKEN=<ВАШ_ТОКЕН_БОТА>
+   TELEGRAM_CHAT_ID=<ВАШ_CHAT_ID>
    ```
 
 5. Убедитесь, что переменные добавлены для **Production Environment**
@@ -32,10 +32,10 @@
 
 ```bash
 vercel env add TELEGRAM_BOT_TOKEN
-# Введите значение: TELEGRAM_BOT_TOKEN_REDACTED
+# Введите значение: <ВАШ_ТОКЕН_БОТА>
 
 vercel env add TELEGRAM_CHAT_ID
-# Введите значение: 592052544
+# Введите значение: <ВАШ_CHAT_ID>
 
 # Для продакшн среды
 vercel env pull .env.production
